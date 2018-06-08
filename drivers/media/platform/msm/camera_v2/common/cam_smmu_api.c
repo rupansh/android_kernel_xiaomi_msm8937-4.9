@@ -23,6 +23,7 @@
 #include <linux/msm_dma_iommu_mapping.h>
 #include <linux/workqueue.h>
 #include <linux/sizes.h>
+#include <linux/qcom_iommu.h>
 #include <soc/qcom/scm.h>
 #include <soc/qcom/secure_buffer.h>
 #include <msm_camera_tz_util.h>

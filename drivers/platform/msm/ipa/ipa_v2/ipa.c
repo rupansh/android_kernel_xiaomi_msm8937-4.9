@@ -23,6 +23,7 @@
 #include <linux/of.h>
 #include <linux/of_platform.h>
 #include <linux/platform_device.h>
+#include <linux/qcom_iommu.h>
 #include <linux/rbtree.h>
 #include <linux/uaccess.h>
 #include <linux/interrupt.h>

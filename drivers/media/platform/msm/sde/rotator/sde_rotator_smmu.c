@@ -20,6 +20,7 @@
 #include <linux/iommu.h>
 #include <linux/of.h>
 #include <linux/of_address.h>
+#include <linux/qcom_iommu.h>
 #include <linux/dma-mapping.h>
 #include <linux/dma-buf.h>
 #include <linux/of_platform.h>
