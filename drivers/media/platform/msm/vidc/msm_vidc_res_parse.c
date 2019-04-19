@@ -923,7 +923,7 @@ static int msm_vidc_setup_context_bank(struct msm_vidc_platform_resources *res,
 	}
 	cb->dev = dev;
 
-	bus = cb->dev->bus;
+	bus = msm_iommu_get_bus(cb->dev);
 	if (IS_ERR_OR_NULL(bus)) {
 		dprintk(VIDC_ERR, "%s - failed to get bus type\n", __func__);
 		rc = PTR_ERR(bus) ?: -ENODEV;

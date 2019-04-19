@@ -274,6 +274,18 @@ fail:
 	return ret;
 }
 
+struct bus_type *msm_iommu_get_bus(struct device *dev)
+{
+	if (of_device_is_compatible(dev->of_node, "qcom,smmu_mdp_unsec") || of_device_is_compatible(dev->of_node, "qcom,smmu_mdp_sec")){
+		dev_info(dev, "platform bus type");
+		return &platform_bus_type;
+	}
+	else{
+		dev_info(dev, "smmu legacy bus type");
+		return &arm_smmu_legacy_bus_type;
+	}
+}
+
 static int iommu_scm_set_pool_size(void)
 {
 	struct scm_desc desc = {0};

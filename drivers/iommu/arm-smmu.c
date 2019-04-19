@@ -584,6 +584,10 @@ static struct arm_smmu_option_prop arm_smmu_options[] = {
 	{ 0, NULL},
 };
 
+struct bus_type arm_smmu_legacy_bus_type = {
+	.name = "arm_smmu_legacy_bus_type",
+};
+
 static phys_addr_t arm_smmu_iova_to_phys(struct iommu_domain *domain,
 					dma_addr_t iova);
 static phys_addr_t arm_smmu_iova_to_phys_hard(struct iommu_domain *domain,
@@ -4813,12 +4817,17 @@ static int arm_smmu_device_dt_probe(struct platform_device *pdev)
 	bus_for_each_dev(&platform_bus_type, NULL, NULL,
 			 arm_smmu_of_iommu_configure_fixup);
 
-	/* Oh, for a proper bus abstraction */
-	if (!iommu_present(&platform_bus_type))
+	ret = bus_register(&arm_smmu_legacy_bus_type);
+	pr_info("bus registr called");
+	if (ret){
 		bus_set_iommu(&platform_bus_type, &arm_smmu_ops);
-	else
-		bus_for_each_dev(&platform_bus_type, NULL, &arm_smmu_ops,
-				 arm_smmu_add_device_fixup);
+		pr_err("bus register failed with retval %d", ret);
+		return 0;
+	}
+
+	/* Oh, for a proper bus abstraction */
+	if (!iommu_present(&arm_smmu_legacy_bus_type))
+		bus_set_iommu(&arm_smmu_legacy_bus_type, &arm_smmu_ops);
 
 	err = register_regulator_notifier(smmu);
 	if (err)

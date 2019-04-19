@@ -41,6 +41,7 @@
 #include <linux/qcom_iommu.h>
 static inline struct bus_type *mdss_mmu_get_bus(struct device *dev)
 {
+	dev_info(dev, "mmu get bus called");
 	return msm_iommu_get_bus(dev);
 }
 static inline struct device *mdss_mmu_get_ctx(const char *name)
