@@ -51,6 +51,9 @@
 #include <soc/qcom/ramdump.h>
 #include <linux/debugfs.h>
 #include <linux/pm_qos.h>
+
+#include <linux/qcom_iommu.h>
+
 #define TZ_PIL_PROTECT_MEM_SUBSYS_ID 0x0C
 #define TZ_PIL_CLEAR_PROTECT_MEM_SUBSYS_ID 0x0D
 #define TZ_PIL_AUTH_QDSP6_PROC 1
@@ -3886,7 +3889,7 @@ static int fastrpc_cb_legacy_probe(struct device *dev)
 		goto bail;
 
 	VERIFY(err, !IS_ERR_OR_NULL(first_sess->smmu.mapping =
-				arm_iommu_create_mapping(&platform_bus_type,
+				arm_iommu_create_mapping(msm_iommu_get_bus(dev),
 						start, 0x78000000)));
 	if (err)
 		goto bail;

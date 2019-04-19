@@ -516,6 +516,10 @@ struct arm_iommus_spec {
 	struct list_head	list;
 };
 
+struct bus_type arm_smmu_legacy_bus_type = {
+	.name = "arm_smmu_legacy_bus_type",
+};
+
 static LIST_HEAD(iommus_nodes);
 
 static int arm_smmu_enable_clocks_atomic(struct arm_smmu_device *smmu);
@@ -592,7 +596,7 @@ static struct arm_smmu_master *find_smmu_master(struct arm_smmu_device *smmu,
 		master = container_of(node, struct arm_smmu_master, node);
 
 	        if (IS_ERR_VALUE(master))
-        	        pr_info("masters may be null. maibe err val? %d", master);
+        	        pr_info("masters may be null. maibe err val?");
 
 
 		pr_info("node is true, count is %d", count);
@@ -4583,9 +4587,18 @@ static int __init arm_smmu_init(void)
 		arm_smmu_free_master_nodes();
 		return ret;
 	}
-	/* Oh, for a proper bus abstraction */
-	if (!iommu_present(&platform_bus_type))
+
+	ret = bus_register(&arm_smmu_legacy_bus_type);
+	pr_info("bus registr called");
+	if (ret){
 		bus_set_iommu(&platform_bus_type, &arm_smmu_ops);
+		pr_err("bus register failed with retval %d", ret);
+		return 0;
+	}
+
+	/* Oh, for a proper bus abstraction */
+	if (!iommu_present(&arm_smmu_legacy_bus_type))
+		bus_set_iommu(&arm_smmu_legacy_bus_type, &arm_smmu_ops);
 
 #ifdef CONFIG_ARM_AMBA
 	if (!iommu_present(&amba_bustype))
