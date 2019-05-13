@@ -104,5 +104,6 @@ static inline struct bus_type *msm_iommu_get_bus(struct device *dev)
 	return &platform_bus_type;
 }
 
+extern struct bus_type iommu_non_sec_bus_type;
 
 #endif

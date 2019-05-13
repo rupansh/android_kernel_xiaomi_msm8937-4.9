@@ -80,6 +80,10 @@ static DEFINE_MUTEX(msm_iommu_lock);
 struct dump_regs_tbl_entry dump_regs_tbl[MAX_DUMP_REGS];
 static struct iommu_ops msm_iommu_ops;
 
+struct bus_type iommu_non_sec_bus_type = {
+	.name = "msm_iommu_non_sec_bus",
+};
+
 static int apply_bus_vote(struct msm_iommu_drvdata *drvdata, unsigned int vote)
 {
 	int ret = 0;
@@ -1707,8 +1711,9 @@ int msm_iommu_init(struct device *dev)
 
 	if (done)
 		return 0;
+	bus_register(&iommu_non_sec_bus_type);
 
-	ret = bus_set_iommu(&platform_bus_type, &msm_iommu_ops);
+	ret = bus_set_iommu(&iommu_non_sec_bus_type, &msm_iommu_ops);
 	if (ret)
 		return ret;
 

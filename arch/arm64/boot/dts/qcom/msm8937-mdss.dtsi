@@ -185,7 +185,7 @@
 
 		smmu_mdp_unsec: qcom,smmu_mdp_unsec_cb {
 			compatible = "qcom,smmu_mdp_unsec";
-			iommus = <&apps_iommu 0x2800 0>; /* For NS ctx bank */
+			iommus = <&mdss_smmu 21>; /* For NS ctx bank */
 		};
 		smmu_mdp_sec: qcom,smmu_mdp_sec_cb {
 			compatible = "qcom,smmu_mdp_sec";
