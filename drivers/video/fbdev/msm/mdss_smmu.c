@@ -40,7 +40,7 @@
 #include <linux/qcom_iommu.h>
 static inline struct bus_type *mdss_mmu_get_bus(struct device *dev)
 {
-	return &iommu_non_sec_bus_type;
+	return (of_device_is_compatible(dev->of_node, "qcom,smmu_mdp_unsec")) ? &iommu_non_sec_bus_type : &platform_bus_type;
 }
 static inline struct device *mdss_mmu_get_ctx(const char *name)
 {
