@@ -205,14 +205,21 @@ static int msm_iommu_get_scm_call_avail(void)
 	return is_secure;
 }
 
+static inline int is_vfe_smmu(char const *iommu_name)
+{
+	return (strcmp(iommu_name, "vfe_iommu") == 0);
+}
+
 static void get_secure_id(struct device_node *node,
 			  struct msm_iommu_drvdata *drvdata)
 {
-	if (!msm_iommu_get_scm_call_avail())
-		return;
-
-	of_property_read_u32(node, "qcom,iommu-secure-id",
-				     &drvdata->sec_id);
+	if (msm_iommu_get_scm_call_avail()) {
+		if (!is_vfe_smmu(drvdata->name))
+			of_property_read_u32(node, "qcom,iommu-secure-id",
+					     &drvdata->sec_id);
+		else
+			pr_info("vfe_iommu: Keeping vfe non-secure\n");
+	}
 }
 
 static void get_secure_ctx(struct device_node *node,
@@ -707,12 +714,6 @@ static int msm_iommu_probe(struct platform_device *pdev)
 
 	dev_info(dev, "device %s (model: %d) mapped at %p, with %d ctx banks\n",
 		 drvdata->name, drvdata->model, drvdata->base, drvdata->ncb);
-
-	if (drvdata->sec_id != -1) {
-		ret = msm_iommu_sec_ptbl_init(dev);
-		if (ret)
-			return ret;
-	}
 
 	platform_set_drvdata(pdev, drvdata);
 
