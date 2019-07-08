@@ -4817,11 +4817,11 @@ static int arm_smmu_device_dt_probe(struct platform_device *pdev)
 	bus_for_each_dev(&platform_bus_type, NULL, NULL,
 			 arm_smmu_of_iommu_configure_fixup);
 
-	ret = bus_register(&arm_smmu_legacy_bus_type);
+	err = bus_register(&arm_smmu_legacy_bus_type);
 	pr_info("bus registr called");
-	if (ret){
+	if (err){
 		bus_set_iommu(&platform_bus_type, &arm_smmu_ops);
-		pr_err("bus register failed with retval %d", ret);
+		pr_err("bus register failed with retval %d", err);
 		return 0;
 	}
 

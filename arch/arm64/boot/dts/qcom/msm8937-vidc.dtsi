@@ -62,50 +62,26 @@
 			};
 		};
 
-		/* MMUs */
-		non_secure_cb {
-			compatible = "qcom,msm-vidc,context-bank";
-			label = "venus_ns";
-			iommus = <&apps_smmu 21>;
-			buffer-types = <0xfff>;
-			virtual-addr-pool = <0x5dc00000 0x7f000000
-				0xdcc00000 0x1000000>;
-		};
-
-		/* IOMMU Contexts: Secure */
-		firmware_cb {
-			compatible = "qcom,msm-vidc,context-bank";
-			/* Firmware context bank is unlabeled in 4.4 */
-			/* note: old-style label is "venus_fw" */
-			qcom,fw-context-bank;
-			iommus = <&apps_smmu 4>;
-		};
-
-		secure_bitstream_cb {
-			compatible = "qcom,msm-vidc,context-bank";
-			label = "venus_sec_bitstream";
-			iommus = <&apps_smmu 6>;
-			buffer-types = <0x241>;
-			virtual-addr-pool = <0x4b000000 0x12c00000>;
-			qcom,secure-context-bank;
-		};
-
-		venus_secure_pixel_cb {
-			compatible = "qcom,msm-vidc,context-bank";
-			label = "venus_sec_pixel";
-			iommus = <&apps_smmu 7>;
-			buffer-types = <0x106>;
-			virtual-addr-pool = <0x25800000 0x25800000>;
-			qcom,secure-context-bank;
-		};
-
-		venus_secure_non_pixel_cb {
-			compatible = "qcom,msm-vidc,context-bank";
-			label = "venus_sec_non_pixel";
-			iommus = <&apps_smmu 5>;
-			buffer-types = <0x480>;
-			virtual-addr-pool = <0x1000000 0x24800000>;
-			qcom,secure-context-bank;
+		qcom,vidc-iommu-domains {
+			qcom,domain-ns {
+				qcom,vidc-domain-phandle = <&venus_domain_ns>;
+				qcom,vidc-buffer-types = <0xfff>;
+			};
+			qcom,domain-sec-bs {
+				qcom,vidc-domain-phandle =
+						<&venus_domain_sec_bitstream>;
+				qcom,vidc-buffer-types = <0x241>;
+			};
+			qcom,domain-sec-px {
+				qcom,vidc-domain-phandle =
+						<&venus_domain_sec_pixel>;
+				qcom,vidc-buffer-types = <0x106>;
+			};
+			qcom,domain-sec-np {
+				qcom,vidc-domain-phandle =
+						<&venus_domain_sec_non_pixel>;
+				qcom,vidc-buffer-types = <0x480>;
+			};
 		};
 
 		/* Buses */

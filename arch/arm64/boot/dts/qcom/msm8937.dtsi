@@ -175,6 +175,7 @@
 #include "msm-arm-smmu-8937.dtsi"
 #include "msm8937-smp2p.dtsi"
 #include "msm8937-bus.dtsi"
+#include "msm8937-iommu-domains.dtsi"
 #include "msm8937-vidc.dtsi"
 #include "msm8937-pm.dtsi"
 #include "msm8937-gpu.dtsi"
@@ -1356,7 +1357,7 @@
 		qcom,msm_fastrpc_compute_cb {
 			compatible = "qcom,msm-fastrpc-legacy-compute-cb";
 			label = "adsprpc-smd";
-			iommus = <&apps_smmu 16>;
+			iommus = <&apps_iommu 16>;
 			sids = <0x8 0x9 0xa 0xb 0xc 0xd 0xe 0xf>;
 		};
 	};

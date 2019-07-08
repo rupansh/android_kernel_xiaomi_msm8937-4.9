@@ -1506,6 +1506,8 @@ static int msm_vidc_populate_legacy_context_bank(
 		dprintk(VIDC_DBG,
 			"%s legacy iommu domains not present\n", __func__);
 		return 0;
+	} else{
+		dprintk(VIDC_ERR, "%s vidc domains present oga\n", __func__);
 	}
 
 	/* set up each context bank for legacy DT bindings*/
