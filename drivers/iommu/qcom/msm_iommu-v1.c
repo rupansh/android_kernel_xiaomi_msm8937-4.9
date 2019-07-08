@@ -33,7 +33,7 @@
 #include <asm/sizes.h>
 #include <linux/dma-iommu.h>
 
-#include "qcom_iommu.h"
+#include <linux/qcom_iommu.h>
 #include "msm_iommu_hw-v1.h"
 #include "msm_iommu_priv.h"
 #include "msm_iommu_perfmon.h"
@@ -1639,6 +1639,11 @@ static struct iommu_ops msm_iommu_ops = {
 	.domain_get_attr = msm_iommu_domain_get_attr,
 	.of_xlate = msm_iommu_of_xlate,
 };
+
+struct bus_type *msm_iommu_get_bus(struct device *dev)
+{
+	return (of_device_is_compatible(dev->of_node, "qcom,smmu-kgsl-cb")) ?  &arm_smmu_legacy_bus_type : &platform_bus_type;
+}
 
 int msm_iommu_init(struct device *dev)
 {

@@ -26,7 +26,7 @@
 #include <linux/of_device.h>
 
 #include "msm_iommu_hw-v1.h"
-#include "qcom_iommu.h"
+#include <linux/qcom_iommu.h>
 #include <linux/qcom_scm.h>
 #include "msm_iommu_perfmon.h"
 #include "msm_iommu_priv.h"

@@ -35,7 +35,7 @@
 #include "msm_iommu_perfmon.h"
 #include "msm_iommu_hw-v1.h"
 #include "msm_iommu_priv.h"
-#include "qcom_iommu.h"
+#include <linux/qcom_iommu.h>
 #include <trace/events/kmem.h>
 
 /* bitmap of the page sizes currently supported */
