@@ -65,6 +65,10 @@
 
 #define MMU_SEP (MMU_IAS - 1)
 
+struct bus_type msm_iommu_bus_type = {
+	.name = "msm_iommu_bus",
+};
+
 struct msm_iommu_master {
 	struct list_head list;
 	unsigned int ctx_num;
@@ -1673,6 +1677,11 @@ static unsigned long msm_iommu_get_pgsize_bitmap(struct iommu_domain *domain)
 	return priv->pgtbl_cfg.pgsize_bitmap;
 }
 
+struct bus_type *msm_iommu_get_bus(struct device *dev)
+{
+	return (of_device_is_compatible(dev->of_node, "qcom,smmu-kgsl-cb")) ?  &platform_bus_type : &msm_iommu_bus_type;
+}
+
 static struct iommu_ops msm_iommu_ops = {
 	.capable = msm_iommu_capable,
 	.domain_alloc = msm_iommu_domain_alloc,
@@ -1708,7 +1717,11 @@ int msm_iommu_init(struct device *dev)
 	if (done)
 		return 0;
 
-	ret = bus_set_iommu(&platform_bus_type, &msm_iommu_ops);
+	ret = bus_register(&msm_iommu_bus_type);
+	if (ret)
+		return ret;
+
+	ret = bus_set_iommu(&msm_iommu_bus_type, &msm_iommu_ops);
 	if (ret)
 		return ret;
 

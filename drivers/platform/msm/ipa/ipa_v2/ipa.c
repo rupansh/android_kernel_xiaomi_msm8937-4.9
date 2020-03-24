@@ -4711,7 +4711,7 @@ static int ipa_smmu_wlan_cb_probe(struct device *dev)
 	IPADBG("sub pdev=%p\n", dev);
 
 	cb->dev = dev;
-	cb->iommu = iommu_domain_alloc(&platform_bus_type);
+	cb->iommu = iommu_domain_alloc(msm_iommu_get_bus(dev));
 	if (!cb->iommu) {
 		IPAERR("could not alloc iommu domain\n");
 		/* assume this failure is because iommu driver is not ready */
@@ -4806,7 +4806,7 @@ static int ipa_smmu_uc_cb_probe(struct device *dev)
 	IPADBG("UC CB PROBE=%p create IOMMU mapping\n", dev);
 
 	cb->dev = dev;
-	cb->mapping = arm_iommu_create_mapping(&platform_bus_type,
+	cb->mapping = arm_iommu_create_mapping(msm_iommu_get_bus(dev),
 				cb->va_start, cb->va_size);
 	if (IS_ERR_OR_NULL(cb->mapping)) {
 		IPADBG("Fail to create mapping\n");

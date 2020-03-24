@@ -22,6 +22,7 @@
 void *msm_iommu_lock_initialize(void);
 void msm_iommu_mutex_lock(void);
 void msm_iommu_mutex_unlock(void);
+struct bus_type *msm_iommu_get_bus(struct device *dev);
 #else
 static inline void *msm_iommu_lock_initialize(void)
 {
@@ -86,13 +87,5 @@ static inline int msm_soc_version_supports_iommu_v0(void)
 	return 0;
 }
 #endif
-
-extern struct bus_type platform_bus_type;
-static inline struct bus_type *msm_iommu_get_bus(struct device *dev)
-{
-
-	return &platform_bus_type;
-}
-
 
 #endif
