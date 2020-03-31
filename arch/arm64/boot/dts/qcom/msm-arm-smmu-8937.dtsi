@@ -20,19 +20,30 @@
 		qcom,tz-device-id = "GPU";
 		reg = <0x1c40000 0x10000>;
 		#iommu-cells = <1>;
-		#global-interrupts = <1>;
-		interrupts = <0 199 0>, <0 225 0>, <0 232 0>,
-				<0 233 0>, <0 234 0>;
-		qcom,deferred-regulator-disable-delay = <80>;
-		qcom,register-save;
-		qcom,skip-init;
+		#global-interrupts = <0>;
+		interrupts =  <GIC_SPI 225 IRQ_TYPE_LEVEL_HIGH>,
+				<GIC_SPI 232 IRQ_TYPE_LEVEL_HIGH>,
+				<GIC_SPI 233 IRQ_TYPE_LEVEL_HIGH>,
+				<GIC_SPI 234 IRQ_TYPE_LEVEL_HIGH>;
 		qcom,dynamic;
+		qcom,use-3-lvl-tables;
 		qcom,enable-smmu-halt;
+		qcom,skip-init;
 		vdd-supply = <&gdsc_oxili_cx>;
+		qcom,regulator-names = "vdd";
 		clocks = <&clock_gcc clk_gcc_oxili_ahb_clk>,
-			<&clock_gcc clk_gcc_bimc_gfx_clk>;
+			     <&clock_gcc clk_gcc_bimc_gfx_clk>;
 		clock-names = "gpu_ahb_clk", "gcc_bimc_gfx_clk";
-		#clock-cells = <1>;
+	};
+
+	/* A test device to test the SMMU operation */
+	kgsl_iommu_test_device0 {
+		status = "disabled";
+		compatible = "iommu-debug-test";
+		/* The SID should be valid one to get the proper
+		 *SMR,S2CR indices.
+		 */
+		iommus = <&kgsl_smmu 0x0>;
 	};
 
 	apps_smmu: qcom,iommu@1e00000 {

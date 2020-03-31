@@ -1065,26 +1065,26 @@ static int arm_smmu_power_on_slow(struct arm_smmu_power_resources *pwr)
 		return 0;
 	}
 
-	ret = arm_smmu_request_bus(pwr);
+	ret = arm_smmu_enable_regulators(pwr);
 	if (ret)
 		goto out_unlock;
 
-	ret = arm_smmu_enable_regulators(pwr);
+	ret = arm_smmu_request_bus(pwr);
 	if (ret)
-		goto out_disable_bus;
+		goto out_disable_regulators;
 
 	ret = arm_smmu_prepare_clocks(pwr);
 	if (ret)
-		goto out_disable_regulators;
+		goto out_disable_bus;
 
 	pwr->power_count = 1;
 	mutex_unlock(&pwr->power_lock);
 	return 0;
 
-out_disable_regulators:
-	regulator_bulk_disable(pwr->num_gdscs, pwr->gdscs);
 out_disable_bus:
 	arm_smmu_unrequest_bus(pwr);
+out_disable_regulators:
+	regulator_bulk_disable(pwr->num_gdscs, pwr->gdscs);
 out_unlock:
 	mutex_unlock(&pwr->power_lock);
 	return ret;
