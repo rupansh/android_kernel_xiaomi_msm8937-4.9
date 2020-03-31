@@ -612,7 +612,7 @@ int sde_smmu_probe(struct platform_device *pdev)
 	}
 
 	sde_smmu->mmu_mapping = arm_iommu_create_mapping(
-		msm_iommu_get_bus(dev), smmu_domain.start, smmu_domain.size);
+		&platform_bus_type, smmu_domain.start, smmu_domain.size);
 	if (IS_ERR(sde_smmu->mmu_mapping)) {
 		SDEROT_ERR("iommu create mapping failed for domain[%d]\n",
 			smmu_domain.domain);
