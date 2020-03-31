@@ -250,10 +250,6 @@
 	hw-config = "single_dsi";
 };
 
-&mdss_fb0 {
-	/delete-node/ qcom,cont-splash-memory;
-};
-
 &mdss_dsi0 {
 	lab-supply = <&lab_regulator>;
 	ibb-supply = <&ibb_regulator>;
